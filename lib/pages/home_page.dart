@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
+import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
+import 'package:pet_adoption/shared/widgets/choicechip_type.dart';
+import 'package:pet_adoption/shared/widgets/location_pick.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +19,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
+
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -42,11 +48,42 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   color: CustomColor.accentColor, fontWeight: FontWeight.w600),
             ),
-            Provider<String>.value(value: address, child: GestureDetector(
-              onTap: ()async{
-                address = await Navigator.of(context).pushNamed(Router.mapPage) as String;
-              },
-                child: LocationPick()),)
+            Provider<String>.value(
+              value: address,
+              child: GestureDetector(
+                  onTap: () async {
+                    address = await Navigator.of(context)
+                        .pushNamed(Router.mapPage) as String;
+                  },
+                  child: LocationPick()),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Type",
+              style: TextStyle(
+                  color: CustomColor.accentColor, fontWeight: FontWeight.w600),
+            ),
+            StreamProvider<DocumentSnapshot>.value(
+              value: _homeProvider.fetchCategory(),
+              child: Consumer<DocumentSnapshot>(
+                builder: (context, DocumentSnapshot value, child) {
+                  if (value == null) {
+                    return CircularProgressIndicator();
+                  }
+                  
+                  List data = value.data['data'];
+                  
+                  _homeProvider.initChoiceChip(data);
+
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: data.map((val) => new ChoiceChipType(type: val,)).toList(),
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         )
       ],
@@ -54,47 +91,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class LocationPick extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
-    String address = Provider.of<String>(context);
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Colors.black26))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Text(
-              address != null ? address:"Search Location",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-            ),
-          ),
-          Icon(
-            Icons.location_on,
-            color: CustomColor.accentColor,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-class SignOutGoogle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final _authProvider = Provider.of<AuthProvider>(context);
-    return Card(
-      color: Colors.white,
-      child: IconButton(
-          icon: Icon(MdiIcons.logout),
-          onPressed: () {
-            _authProvider.handleSignOut();
-          }),
-    );
-  }
-}
+

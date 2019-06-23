@@ -1,6 +1,6 @@
 # pet_adoption
 
-Application for pet adoption from user for user.
+Application for pet adoption from user to user.
 
 ## Getting Started
 

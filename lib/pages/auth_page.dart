@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
+import 'package:pet_adoption/shared/widgets/auth_facebook.dart';
+import 'package:pet_adoption/shared/widgets/auth_google.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
@@ -54,41 +56,6 @@ class _AuthPageState extends State<AuthPage> {
   }
 }
 
-class SignInGoogle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final _authProvider = Provider.of<AuthProvider>(context);
-    return Card(
-      color: Colors.white,
-      child: IconButton(
-          icon: Image.asset('images/icons/icons8-google-96.png'),
-          onPressed: () {
-            _authProvider.handleSignInGoogle().catchError((err) {
-              print(err);
-            });
-          }),
-    );
-  }
-}
 
-class SignInFacebook extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final _authProvider = Provider.of<AuthProvider>(context);
-    return Card(
-      color: Colors.white,
-      child: IconButton(
-          icon: Image.asset('images/icons/facebook.png'),
-          onPressed: () {
-            _authProvider.handleSignInFacebook().catchError((err) {
-              if(err.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text('Email telah terdaftar di Google')));
-              else
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text('Ada kesalahan')));
 
-            });
-          }),
-    );
-  }
-}
 

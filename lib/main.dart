@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_adoption/pages/auth_page.dart';
 import 'package:pet_adoption/pages/home_page.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
+import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(builder: (_) => AuthProvider(),),
+        ChangeNotifierProvider(builder: (_) => HomeProvider(),),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, value, _){
@@ -30,5 +32,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
