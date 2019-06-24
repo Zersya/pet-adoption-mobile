@@ -13,23 +13,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(builder: (_) => AuthProvider(),),
-        ChangeNotifierProvider(builder: (_) => HomeProvider(),),
+        ChangeNotifierProvider(
+          builder: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          builder: (_) => HomeProvider(),
+        ),
       ],
       child: Consumer<AuthProvider>(
-        builder: (context, value, _){
+        builder: (context, value, _) {
+
           return MaterialApp(
             onGenerateRoute: Router.generateRoute,
             title: 'Pet Adoption',
             theme: ThemeData(
-                primarySwatch: Colors.deepOrange,
-                fontFamily: "Open Sans"
-            ),
-            home: value.user != null ? HomePage():AuthPage(),
+                primarySwatch: Colors.deepOrange, fontFamily: "Open Sans"),
+            home: value.user != null
+                ? HomePage()
+                : AuthPage(),
           );
         },
       ),
     );
   }
 }
-
