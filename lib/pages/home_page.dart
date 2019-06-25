@@ -14,7 +14,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    Provider.of<HomeProvider>(context, listen: false).initMenu(this, 80.0);
+    HomeProvider _homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    _homeProvider.initMenu(this, 80.0);
   }
 
   @override
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
+
     return Stack(
       children: <Widget>[
         MenuDrawer(),

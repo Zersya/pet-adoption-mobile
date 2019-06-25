@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,18 +39,18 @@ class HomeProvider with ChangeNotifier {
 
   void initMenu(vsync, double posY) {
     _animationController = AnimationController(
-        duration: const Duration(milliseconds: 350), vsync: vsync);
+        duration: const Duration(milliseconds: 200), vsync: vsync);
 
     _contentPositionX = Tween(begin: 0.0, end: 220.0).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.ease),
+        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
         parent: _animationController.view));
 
     _contentPositionY = Tween(begin: 0.0, end: posY).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.ease),
+        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
         parent: _animationController.view));
 
     _contentScale = Tween(begin: 1.0, end: 0.8).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.ease),
+        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
         parent: _animationController.view));
 
     _borderRadius = BorderRadiusTween(
@@ -58,13 +59,14 @@ class HomeProvider with ChangeNotifier {
     ).animate(CurvedAnimation(
       parent: _animationController.view,
       curve: Interval(
-        0.200,
+        0.700,
         0.800,
-        curve: Curves.easeOut,
+        curve: Curves.easeInOut,
       ),
     ));
 
     _animationController.forward().orCancel;
+
   }
 
   void disposeMenu() {

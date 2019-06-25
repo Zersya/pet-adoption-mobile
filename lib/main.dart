@@ -3,6 +3,7 @@ import 'package:pet_adoption/pages/auth_page.dart';
 import 'package:pet_adoption/pages/home_page.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
+import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
             onGenerateRoute: Router.generateRoute,
             title: 'Pet Adoption',
             theme: ThemeData(
-                primarySwatch: Colors.deepOrange, fontFamily: "Open Sans"),
+                primarySwatch: Colors.brown, fontFamily: "Open Sans"),
             home: value.user != null
                 ? HomePage()
                 : AuthPage(),

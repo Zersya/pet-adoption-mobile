@@ -4,6 +4,7 @@ import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:pet_adoption/shared/widgets/choicechip_type.dart';
+import 'package:pet_adoption/shared/widgets/circle_photo.dart';
 import 'package:pet_adoption/shared/widgets/location_pick.dart';
 import 'package:provider/provider.dart';
 
@@ -99,13 +100,10 @@ class HeaderHome extends StatelessWidget {
               },
               child: Image.asset(
                 "images/icons/menu_icon.png",
-                width: 35.0,
+                width: 40.0,
               ),
             ),
-            CircleAvatar(
-              backgroundColor: CustomColor.accentColor,
-              child: Icon(Icons.person),
-            )
+            new CirclePhoto()
           ],
         ),
         SizedBox(height: 40),
@@ -159,3 +157,4 @@ class HeaderHome extends StatelessWidget {
     );
   }
 }
+

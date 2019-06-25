@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pet_adoption/providers/auth_provider.dart';
+import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
+import 'package:pet_adoption/shared/router.dart';
+import 'package:pet_adoption/shared/widgets/circle_photo.dart';
+import 'package:provider/provider.dart';
 
 class MenuDrawer extends StatefulWidget {
   @override
@@ -9,6 +14,8 @@ class MenuDrawer extends StatefulWidget {
 class _MenuDrawerState extends State<MenuDrawer> {
   @override
   Widget build(BuildContext context) {
+    AuthProvider _authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(top: 40.0, left: 15, right: 15),
@@ -18,35 +25,19 @@ class _MenuDrawerState extends State<MenuDrawer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
-              leading: CircleAvatar(
-                backgroundColor: CustomColor.primaryColor,
-                child: Icon(
-                  Icons.person,
-                  color: CustomColor.accentColor,
-                ),
-              ),
-              title: Text("Zein Ersyad", style:TextStyle(fontWeight: FontWeight.w700),),
+              leading: CirclePhoto(),
+              title: Text(_authProvider.user.displayName, style:TextStyle(fontWeight: FontWeight.w700),),
             ),
             ListTile(
+              onTap: () {
+                Provider.of<HomeProvider>(context).openDrawer();
+                Navigator.of(context).pushNamed(Router.addPage);
+              },
               leading:  Icon(
-                  Icons.access_alarm,
+                  Icons.pets,
                   color: CustomColor.primaryColor,
                 ),
-              title: Text("Alarm", style:TextStyle(fontWeight: FontWeight.w500),),
-            ),
-            ListTile(
-              leading:  Icon(
-                  Icons.add_a_photo,
-                  color: CustomColor.primaryColor,
-                ),
-              title: Text("Add Photo", style:TextStyle(fontWeight: FontWeight.w500),),
-            ),
-            ListTile(
-              leading:  Icon(
-                  Icons.airline_seat_flat,
-                  color: CustomColor.primaryColor,
-                ),
-              title: Text("Airline seat", style:TextStyle(fontWeight: FontWeight.w500),),
+              title: Text("Add Pet", style:TextStyle(fontWeight: FontWeight.w500),),
             ),
           ],
         ),
