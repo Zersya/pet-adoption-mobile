@@ -11,8 +11,8 @@ class CirclePhoto extends StatelessWidget {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
 
     return Container(
-      width: 60.0,
-      height: 60.0,
+      width: 40.0,
+      height: 40.0,
       decoration: BoxDecoration(
           color: CustomColor.accentColor,
           shape: BoxShape.circle,

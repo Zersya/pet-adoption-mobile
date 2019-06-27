@@ -4,21 +4,24 @@ import 'package:pet_adoption/screens/map_screen.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
+  final bool isDetailAddress;
+
+  const MapPage({Key key, this.isDetailAddress = false}) : super(key: key);
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
   TextEditingController _searchAddress = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ChangeNotifierProvider(
       builder: (_) => MapProvider(),
       child: Consumer<MapProvider>(builder: (context, value, child) {
-        if (value.address.isNotEmpty)
-          _searchAddress.text = value.address[0];
+        if (value.address.isNotEmpty) _searchAddress.text = value.address[0];
+
         return Stack(children: [
           MapScreen(),
           Align(
@@ -30,8 +33,10 @@ class _MapPageState extends State<MapPage> {
                   TextField(
                     controller: _searchAddress,
                     textInputAction: TextInputAction.search,
-                    onSubmitted: (val){
-                      value.addressToLatLong(val, context);
+                    onSubmitted: (val) {
+                      value.addressToLatLong(
+                          address: val,
+                          context: context);
                       value.goToMyPos();
                     },
                     decoration: InputDecoration(
@@ -42,18 +47,19 @@ class _MapPageState extends State<MapPage> {
                       hintText: "Search address",
                     ),
                   ),
-                  SizedBox(height:15),
+                  SizedBox(height: 15),
                   Align(
                       alignment: Alignment.centerRight,
                       child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: Colors.white
-                          ),
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.white),
                           child: IconButton(
-                            icon: Icon(Icons.location_searching), onPressed: (){
+                            icon: Icon(Icons.location_searching),
+                            onPressed: () {
                               value.getPosition(context);
-                          },)))
+                            },
+                          )))
                 ],
               ),
             ),
@@ -63,16 +69,22 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-  Widget _suffixSearch(value){
-    return _searchAddress.value.text.isEmpty ? IconButton(icon:Icon(Icons.search), onPressed: (){
-      value.addressToLatLong(_searchAddress.value.text, context);
-      value.addMarker("Your Place", context);
-      value.goToMyPos();
-    },):
-    IconButton(icon: Icon(Icons.clear), onPressed: () {
-      value.removeMarker("Your Place", 0);
-      _searchAddress.clear();
-    });
+  Widget _suffixSearch(value) {
+    return _searchAddress.value.text.isEmpty
+        ? IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              value.addressToLatLong(_searchAddress.value.text, context);
+              value.addMarker(
+                  context: context);
+              value.goToMyPos();
+            },
+          )
+        : IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              value.removeMarker("Your Place", 0);
+              _searchAddress.clear();
+            });
   }
-
 }

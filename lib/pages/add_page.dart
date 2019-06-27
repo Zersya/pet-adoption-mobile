@@ -1,9 +1,9 @@
-import 'dart:io';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pet_adoption/providers/add_provider.dart';
-import 'package:pet_adoption/shared/custom_color.dart';
+import 'package:pet_adoption/screens/addPetOne_screen.dart';
+import 'package:pet_adoption/screens/addPetTwo_screen.dart';
+import 'package:pet_adoption/shared/widgets/imageSelect_container.dart';
 import 'package:provider/provider.dart';
 
 class AddPage extends StatefulWidget {
@@ -22,82 +22,17 @@ class _AddPageState extends State<AddPage> {
             builder: (_) => AddProvider(),
             child: Consumer<AddProvider>(
               builder: (context, value, child) {
-                return Column(
+                List _general = ['Kindness', 'Healthy', 'Activity'];
+                value.initGeneralPetValue(_general);
+                return PageView(
+                  dragStartBehavior: DragStartBehavior.start,
+                  pageSnapping: true,
                   children: <Widget>[
-                    Flexible(
-                      flex: 1,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 2,
-                              child: ImageContainer(
-                                index: 0,
-                              )),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: <Widget>[
-                                Flexible(
-                                    flex: 1,
-                                    child: ImageContainer(
-                                      index: 1,
-                                    )),
-                                Flexible(
-                                    flex: 1,
-                                    child: ImageContainer(
-                                      index: 2,
-                                    )),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Container(
-                        child: Icon(Icons.info),
-                      ),
-                    )
+                    AddPetOneScreen(),
+                    AddPetTwoScreen(),
                   ],
                 );
               },
             )));
-  }
-}
-
-class ImageContainer extends StatelessWidget {
-  final index;
-
-  ImageContainer({Key key, @required this.index}) : super(key: key);
-
-  File _image;
-
-  @override
-  Widget build(BuildContext context) {
-    AddProvider _addProvider = Provider.of<AddProvider>(context);
-    _image = _addProvider.image[index];
-    return GestureDetector(
-      onTap: () => _addProvider.getImage(index),
-      child: Card(
-        color: CustomColor.accentColor,
-        elevation: 10.0,
-        child: Container(
-          margin: EdgeInsets.all(5.0),
-          alignment: Alignment.center,
-          child: _addProvider.image[index] != null
-              ? Image.file(
-                  _image,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                )
-              : Icon(
-                  Icons.add,
-                  size: 48.0,
-                  color: Colors.white,
-                ),
-        ),
-      ),
-    );
   }
 }

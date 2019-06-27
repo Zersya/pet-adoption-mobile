@@ -32,7 +32,7 @@ class MapProvider with ChangeNotifier {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     _positionNow = position;
-    addMarker("Your Place", context);
+    addMarker(context: context);
     latLongToAddress();
     notifyListeners();
   }
@@ -49,61 +49,80 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addressToLatLong(String address, context) async{
-    _placemark = await Geolocator()
-        .placemarkFromAddress(address);
+  void addressToLatLong({String address, context}) async {
+    _placemark = await Geolocator().placemarkFromAddress(address);
     _positionNow = _placemark[0].position;
-    addMarker("Your Place", context);
+    addMarker(context: context);
     placeMarkToAddress();
     notifyListeners();
   }
 
-  void addMarker(String id, context) {
+  void addMarker({String id = "Your Place", context}) {
     final MarkerId markerId = MarkerId(id);
 
     final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(positionNow.latitude, positionNow.longitude),
-      infoWindow: InfoWindow(title: markerId.value, snippet: '*'),
-      onTap: (){
-        Navigator.of(context).pop(_placemark[0].subLocality +", "+_placemark[0].subAdministrativeArea);
-      }
-    );
+        markerId: markerId,
+        position: LatLng(positionNow.latitude, positionNow.longitude),
+        infoWindow: InfoWindow(title: markerId.value, snippet: '*'),
+        onTap: () {
+          Navigator.of(context).pop([
+            _placemark[0].subLocality +
+                ", " +
+                _placemark[0].subAdministrativeArea,
+            _placemark[0].thoroughfare +
+                ", " +
+                _placemark[0].subThoroughfare +
+                ", " +
+                _placemark[0].subLocality +
+                ", " +
+                _placemark[0].locality +
+                ", " +
+                _placemark[0].subAdministrativeArea +
+                ", " +
+                _placemark[0].administrativeArea +
+                ", " +
+                _placemark[0].country
+          ]);
+        });
 
     _markers[markerId] = marker;
     notifyListeners();
   }
 
-  void removeMarker(String id, int index){
+  void removeMarker(String id, int index) {
     _markers.remove(MarkerId(id));
     _address.removeAt(index);
     notifyListeners();
   }
 
-  void placeMarkToAddress(){
-    _address = _placemark.map((value) => value.thoroughfare +
-        ", " +
-        value.subThoroughfare +
-        ", " +
-        value.subLocality +
-        ", " +
-        value.locality +
-        ", " +
-        value.subAdministrativeArea +
-        ", " +
-        value.administrativeArea +
-        ", " +
-        value.country).toList();
+  void placeMarkToAddress() {
+    _address = _placemark
+        .map((value) =>
+            value.thoroughfare +
+            ", " +
+            value.subThoroughfare +
+            ", " +
+            value.subLocality +
+            ", " +
+            value.locality +
+            ", " +
+            value.subAdministrativeArea +
+            ", " +
+            value.administrativeArea +
+            ", " +
+            value.country)
+        .toList();
 
     _cameraPosition = CameraPosition(
         target: LatLng(positionNow.latitude, positionNow.longitude),
         zoom: 14.151926040649414);
-        goToMyPos();
+    goToMyPos();
     notifyListeners();
   }
 
   Future<void> goToMyPos() async {
     GoogleMapController googleMapController = await _controller.future;
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 }

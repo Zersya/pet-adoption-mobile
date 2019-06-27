@@ -13,8 +13,8 @@ class HomeProvider with ChangeNotifier {
   Map _selectedChip;
   Map get selectedChip => _selectedChip;
 
-  String _address;
-  String get address => _address;
+  List<String> _address = [null, null];
+  List<String> get address => _address;
 
   bool isInit = true;
 
@@ -65,7 +65,7 @@ class HomeProvider with ChangeNotifier {
       ),
     ));
 
-    _animationController.forward().orCancel;
+    // _animationController.forward().orCancel;
 
   }
 
@@ -91,10 +91,10 @@ class HomeProvider with ChangeNotifier {
 
 //========================================================
 
-  void initChoiceChip(List data) {
+  void initChoiceChip(List<DocumentSnapshot> data) {
     if (isInit) {
       _selectedChip =
-          Map.fromIterable(data, key: (v) => v, value: (v) => false);
+          Map.fromIterable(data, key: (v) => v.data['name'], value: (v) => false);
       isInit = false;
     }
   }
@@ -104,15 +104,14 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAddress(String address) {
+  void setAddress(List<String> address) {
     _address = address;
     notifyListeners();
   }
 
-  Stream<DocumentSnapshot> fetchCategory() {
+  Stream<QuerySnapshot> fetchCategories() {
     return Firestore.instance
-        .collection("utilitys")
-        .document("category")
+        .collection("categories")
         .snapshots();
   }
 }

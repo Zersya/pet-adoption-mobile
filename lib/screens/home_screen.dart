@@ -113,11 +113,11 @@ class HeaderHome extends StatelessWidget {
               color: CustomColor.accentColor, fontWeight: FontWeight.w600),
         ),
         Provider<String>.value(
-          value: _homeProvider.address,
+          value: _homeProvider.address[0],
           child: GestureDetector(
               onTap: () async {
-                String address = await Navigator.of(context)
-                    .pushNamed(Router.mapPage) as String;
+                List<String> address = await Navigator.of(context)
+                    .pushNamed(Router.mapPage) as List<String>;
                 _homeProvider.setAddress(address);
               },
               child: LocationPick()),
@@ -128,15 +128,15 @@ class HeaderHome extends StatelessWidget {
           style: TextStyle(
               color: CustomColor.accentColor, fontWeight: FontWeight.w600),
         ),
-        StreamProvider<DocumentSnapshot>.value(
-          value: _homeProvider.fetchCategory(),
-          child: Consumer<DocumentSnapshot>(
-            builder: (context, DocumentSnapshot value, child) {
+        StreamProvider<QuerySnapshot>.value(
+          value: _homeProvider.fetchCategories(),
+          child: Consumer<QuerySnapshot>(
+            builder: (context, QuerySnapshot value, child) {
               if (value == null) {
                 return CircularProgressIndicator();
               }
 
-              List data = value.data['data'];
+              List<DocumentSnapshot> data = value.documents;
 
               _homeProvider.initChoiceChip(data);
 
@@ -145,7 +145,7 @@ class HeaderHome extends StatelessWidget {
                 child: Row(
                   children: data
                       .map((val) => new ChoiceChipType(
-                            type: val,
+                            type: val.data['name'],
                           ))
                       .toList(),
                 ),
@@ -157,4 +157,3 @@ class HeaderHome extends StatelessWidget {
     );
   }
 }
-
