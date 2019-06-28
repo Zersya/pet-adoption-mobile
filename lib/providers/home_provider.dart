@@ -13,7 +13,7 @@ class HomeProvider with ChangeNotifier {
   Map _selectedChip;
   Map get selectedChip => _selectedChip;
 
-  List<String> _address = [null, null];
+  List<String> _address = [null, null, null, null];
   List<String> get address => _address;
 
   bool isInit = true;
@@ -105,7 +105,8 @@ class HomeProvider with ChangeNotifier {
   }
 
   void setAddress(List<String> address) {
-    _address = address;
+    if(address != null)
+      _address = address;
     notifyListeners();
   }
 

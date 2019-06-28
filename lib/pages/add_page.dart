@@ -25,6 +25,7 @@ class _AddPageState extends State<AddPage> {
                 List _general = ['Kindness', 'Healthy', 'Activity'];
                 value.initGeneralPetValue(_general);
                 return PageView(
+                  controller: value.pageController,
                   dragStartBehavior: DragStartBehavior.start,
                   pageSnapping: true,
                   children: <Widget>[

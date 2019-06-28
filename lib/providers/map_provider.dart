@@ -44,7 +44,8 @@ class MapProvider with ChangeNotifier {
 
   void latLongToAddress() async {
     _placemark = await Geolocator()
-        .placemarkFromCoordinates(positionNow.latitude, positionNow.longitude);
+        .placemarkFromCoordinates(positionNow.latitude, positionNow.longitude)
+        .catchError((err) => print(err));
     placeMarkToAddress();
     notifyListeners();
   }
@@ -81,7 +82,9 @@ class MapProvider with ChangeNotifier {
                 ", " +
                 _placemark[0].administrativeArea +
                 ", " +
-                _placemark[0].country
+                _placemark[0].country,
+            positionNow.latitude.toString(),
+            positionNow.longitude.toString()
           ]);
         });
 

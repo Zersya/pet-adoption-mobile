@@ -33,6 +33,17 @@ class AddPetOneScreen extends StatelessWidget {
                       filled: true,
                       fillColor: Colors.black12),
                 ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _addProvider.aboutPetController,
+                  maxLength: 620,
+                  minLines: 3,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                      hintText: "About",
+                      filled: true,
+                      fillColor: Colors.black12),
+                ),
                 Divider(height: 25.0, color: Colors.black87),
                 LimitedBox(
                   maxHeight: 80,
@@ -67,6 +78,19 @@ class AddPetOneScreen extends StatelessWidget {
                       filled: true,
                       fillColor: Colors.black12),
                 ),
+                SizedBox(height: 10.0,),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: RaisedButton(
+                    color: CustomColor.accentColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                    textColor: Colors.white,
+                    child: Text("Next"),
+                    onPressed: () {
+                      _addProvider.pageController.nextPage(curve: Curves.easeOut, duration: Duration(milliseconds: 250));
+                    },
+                  ),
+                )
               ],
             ),
           ),

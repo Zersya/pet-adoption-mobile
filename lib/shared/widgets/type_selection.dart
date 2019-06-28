@@ -14,7 +14,7 @@ class TypeSelection extends StatelessWidget {
     if(_querySnapshot == null) return Center(child: CircularProgressIndicator());
     List<DocumentSnapshot> _listCategory = _querySnapshot.documents;
 
-    _addProvider.init(_listCategory.length);
+    _addProvider.init(_listCategory);
 
     return Stack(
       children: <Widget>[

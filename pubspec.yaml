@@ -28,6 +28,7 @@ dependencies:
   google_sign_in: ^4.0.2
   provider: ^3.0.0+1
   firebase_core: ^0.4.0+6
+  firebase_storage: ^3.0.2
   cloud_firestore: ^0.12.5+2
   flutter_facebook_login: ^2.0.1
   google_maps_flutter: ^0.5.18

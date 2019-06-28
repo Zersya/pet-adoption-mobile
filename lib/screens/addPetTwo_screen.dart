@@ -7,23 +7,35 @@ import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:provider/provider.dart';
 
 class AddPetTwoScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     AddProvider _addProvider = Provider.of<AddProvider>(context);
 
     return SingleChildScrollView(
-      child: Column(
-          children: _addProvider.generalPetValue.keys.map((val) {
-        return CircularSlider(
-          title: val,
-          backgroundColor:
-              CustomColor.selectedColor[_addProvider.selectedColor[val]].backgroundColor,
-          baseColor: CustomColor.selectedColor[_addProvider.selectedColor[val]].middleColor,
-          selectionColor:
-              CustomColor.selectedColor[_addProvider.selectedColor[val]].foregroundColor,
-        );
-      }).toList()),
+      child: Column(children: [
+        ..._addProvider.generalPetValue.keys.map((val) {
+          return CircularSlider(
+            title: val,
+            backgroundColor: CustomColor
+                .selectedColor[_addProvider.selectedColor[val]].backgroundColor,
+            baseColor: CustomColor
+                .selectedColor[_addProvider.selectedColor[val]].middleColor,
+            selectionColor: CustomColor
+                .selectedColor[_addProvider.selectedColor[val]].foregroundColor,
+          );
+        }).toList(),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: RaisedButton(
+            color: CustomColor.accentColor,
+            textColor: Colors.white,
+            child: Text("Submit Pet"),
+            onPressed: () {
+              _addProvider.submitPet();
+            },
+          ),
+        )
+      ]),
     );
   }
 }
@@ -70,7 +82,7 @@ class CircularSlider extends StatelessWidget {
                     alignment: Alignment.center,
                     child: SingleCircularSlider(
                       100,
-                      0,
+                      _addProvider.generalPetValue[this.title],
                       baseColor: this.baseColor,
                       handlerColor: CustomColor.accentColor,
                       selectionColor: this.selectionColor,
