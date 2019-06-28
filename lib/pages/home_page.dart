@@ -10,13 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-
-    HomeProvider _homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    _homeProvider.initMenu(this, 80.0);
-  }
 
   @override
   void dispose() {
@@ -27,15 +20,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
+    _homeProvider.initMenu(
+        this,
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height / 2,
+        MediaQuery.of(context).size.height);
 
     return Stack(
       children: <Widget>[
         MenuDrawer(),
         AnimatedContainer(
           transform: Matrix4.identity()
-            ..translate(_homeProvider.contentPositionX.value, _homeProvider.contentPositionY.value)
+            ..translate(
+                _homeProvider.contentPositionX.value,
+                _homeProvider.contentPositionY.value -
+                    _homeProvider.contentPositionY.value *
+                        _homeProvider.contentScale.value)
             ..scale(_homeProvider.contentScale.value),
-          child: HomeScreen(),
+          child: Stack(
+            children: <Widget>[
+              HomeScreen(),
+              GestureDetector(
+                  onHorizontalDragStart: (DragStartDetails val) {
+                    _homeProvider.openDrawer();
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    width: MediaQuery.of(context).size.width / 30,
+                    height: MediaQuery.of(context).size.height,
+                  )),
+            ],
+          ),
           duration: _homeProvider.animationController.duration,
         ),
       ],

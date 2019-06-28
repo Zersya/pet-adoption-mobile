@@ -37,36 +37,35 @@ class HomeProvider with ChangeNotifier {
   Animation<BorderRadius> _borderRadius;
   Animation<BorderRadius> get borderRadius => _borderRadius;
 
-  void initMenu(vsync, double posY) {
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 200), vsync: vsync);
+  void initMenu(vsync, double posX, double posY, double contentScale) {
+    if (isInit) {
+      _animationController = AnimationController(
+          duration: const Duration(milliseconds: 200), vsync: vsync);
 
-    _contentPositionX = Tween(begin: 0.0, end: 220.0).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
-        parent: _animationController.view));
+      _contentPositionX = Tween(begin: 0.0, end: posX).animate(CurvedAnimation(
+          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          parent: _animationController.view));
 
-    _contentPositionY = Tween(begin: 0.0, end: posY).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
-        parent: _animationController.view));
+      _contentPositionY = Tween(begin: 0.0, end: posY).animate(CurvedAnimation(
+          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          parent: _animationController.view));
 
-    _contentScale = Tween(begin: 1.0, end: 0.8).animate(CurvedAnimation(
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
-        parent: _animationController.view));
+      _contentScale = Tween(begin: 1.0, end: 0.8).animate(CurvedAnimation(
+          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          parent: _animationController.view));
 
-    _borderRadius = BorderRadiusTween(
-      begin: BorderRadius.circular(0.0),
-      end: BorderRadius.circular(35.0),
-    ).animate(CurvedAnimation(
-      parent: _animationController.view,
-      curve: Interval(
-        0.700,
-        0.800,
-        curve: Curves.easeInOut,
-      ),
-    ));
-
-    // _animationController.forward().orCancel;
-
+      _borderRadius = BorderRadiusTween(
+        begin: BorderRadius.circular(0.0),
+        end: BorderRadius.circular(35.0),
+      ).animate(CurvedAnimation(
+        parent: _animationController.view,
+        curve: Interval(
+          0.700,
+          0.800,
+          curve: Curves.easeInOut,
+        ),
+      ));
+    }
   }
 
   void disposeMenu() {
@@ -77,7 +76,7 @@ class HomeProvider with ChangeNotifier {
   void openDrawer() async {
     switch (_statusDrawer) {
       case StatusDrawer.closed:
-       await _animationController.forward().orCancel;
+        await _animationController.forward().orCancel;
         _statusDrawer = StatusDrawer.open;
         break;
       case StatusDrawer.open:
@@ -93,8 +92,8 @@ class HomeProvider with ChangeNotifier {
 
   void initChoiceChip(List<DocumentSnapshot> data) {
     if (isInit) {
-      _selectedChip =
-          Map.fromIterable(data, key: (v) => v.data['name'], value: (v) => false);
+      _selectedChip = Map.fromIterable(data,
+          key: (v) => v.data['name'], value: (v) => false);
       isInit = false;
     }
   }
@@ -105,14 +104,11 @@ class HomeProvider with ChangeNotifier {
   }
 
   void setAddress(List<String> address) {
-    if(address != null)
-      _address = address;
+    if (address != null) _address = address;
     notifyListeners();
   }
 
   Stream<QuerySnapshot> fetchCategories() {
-    return Firestore.instance
-        .collection("categories")
-        .snapshots();
+    return Firestore.instance.collection("categories").snapshots();
   }
 }
