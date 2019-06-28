@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
     _homeProvider.initMenu(
         this,
-        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.width/1.5,
         MediaQuery.of(context).size.height / 2,
         MediaQuery.of(context).size.height);
 

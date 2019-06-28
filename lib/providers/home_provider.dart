@@ -111,4 +111,8 @@ class HomeProvider with ChangeNotifier {
   Stream<QuerySnapshot> fetchCategories() {
     return Firestore.instance.collection("categories").snapshots();
   }
+
+  Stream<QuerySnapshot> fetchPets(){
+    return Firestore.instance.collection('pets').snapshots();
+  }
 }

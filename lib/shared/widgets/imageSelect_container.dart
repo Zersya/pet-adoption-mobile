@@ -30,6 +30,7 @@ class ImageSelectContainer extends StatelessWidget {
                   _image,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  height: double.infinity,
                 )
               : Icon(
                   Icons.add,

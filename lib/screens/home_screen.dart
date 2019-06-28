@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
@@ -41,24 +44,36 @@ class HomeScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 40.0, left: 15, right: 15),
-              child: CustomScrollView(slivers: <Widget>[
-                new HeaderHome(),
-                SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  delegate: SliverChildListDelegate(
-                    [
-                      BodyWidget(Colors.blue),
-                      BodyWidget(Colors.green),
-                      BodyWidget(Colors.yellow),
-                      BodyWidget(Colors.orange),
-                      BodyWidget(Colors.blue),
-                      BodyWidget(Colors.red),
-                      BodyWidget(Colors.amber),
-                    ],
-                  ),
+              child: StreamProvider<QuerySnapshot>.value(
+                value: _homeProvider.fetchPets(),
+                child: Consumer<QuerySnapshot>(
+                  builder: (context, value, child) {
+                    if (value == null)
+                      return SpinKitRotatingCircle(
+                        color: CustomColor.accentColor,
+                        size: 50.0,
+                      );
+
+                    return CustomScrollView(slivers: <Widget>[
+                      new HeaderHome(),
+                      SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        delegate: SliverChildListDelegate(
+                          [
+                            if (value.documents.length > 0)
+                              ...value.documents.map((val) => BodyWidget(val))
+                            else
+                              Center(
+                                child: Text("No data found!"),
+                              )
+                          ],
+                        ),
+                      )
+                    ]);
+                  },
                 ),
-              ]),
+              ),
             )
           ],
         )),
@@ -68,18 +83,50 @@ class HomeScreen extends StatelessWidget {
 }
 
 class BodyWidget extends StatelessWidget {
-  final Color color;
+  final DocumentSnapshot snapshot;
 
-  BodyWidget(this.color);
+  BodyWidget(this.snapshot);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      color: color,
-      alignment: Alignment.center,
-      child: Text("aosakosakodsoak"),
-    );
+    return Card(
+        clipBehavior: Clip.antiAlias,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        child: Stack(
+          children: <Widget>[
+            Container(
+                alignment: Alignment.center,
+                child: CachedNetworkImage(
+                  imageUrl: this.snapshot.data['imageUrls'][0],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                )),
+            Container(
+              color: Colors.black12,
+              padding: EdgeInsets.all(20.0),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      this.snapshot.data['petName'],
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      this.snapshot.data['typePet'],
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
 

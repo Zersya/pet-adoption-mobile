@@ -8,6 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+enum StateSubmit {
+  notSubmited,
+  isLoading,
+  Submited
+}
+
 class AddProvider with ChangeNotifier {
   List<File> _image = List(3);
   List<File> get image => _image;
@@ -43,7 +49,13 @@ class AddProvider with ChangeNotifier {
   Map<String, int> _selectedColor;
   Map<String, int> get selectedColor => _selectedColor;
 
-  void submitPet() async{
+  StateSubmit _stateAddPet = StateSubmit.notSubmited;
+  StateSubmit get stateAddPet => _stateAddPet;
+
+  Future submitPet() async{
+    _stateAddPet = StateSubmit.isLoading;
+    notifyListeners();
+
     String _petName = _namePetController.text;
     String _aboutPet = _aboutPetController.text;
     String _typePet = _petType[_selectedType] as String;
@@ -57,7 +69,7 @@ class AddProvider with ChangeNotifier {
       if (url != null) _urls.add(url);
     }
 
-    Firestore.instance.collection("pets").document().setData({
+    await Firestore.instance.collection("pets").document().setData({
       'petName': _petName,
       'aboutPet': _aboutPet,
       'typePet': _typePet,
@@ -66,6 +78,8 @@ class AddProvider with ChangeNotifier {
       'generalPetValues': _generalPetValue,
       'imageUrls': _urls
     });
+    _stateAddPet = StateSubmit.Submited;
+    notifyListeners();
   }
 
   Future<String> _uploadImage(image, petName, index) async {
@@ -73,7 +87,7 @@ class AddProvider with ChangeNotifier {
       return null;
     }
     final String filename =
-        petName + index + extension(image.path);
+        petName + index.toString() + extension(image.path);
     final StorageReference storageRef =
         FirebaseStorage.instance.ref().child(filename);
     final StorageUploadTask uploadTask = storageRef.putFile(image);
