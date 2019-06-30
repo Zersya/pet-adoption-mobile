@@ -43,15 +43,15 @@ class HomeProvider with ChangeNotifier {
           duration: const Duration(milliseconds: 200), vsync: vsync);
 
       _contentPositionX = Tween(begin: 0.0, end: posX).animate(CurvedAnimation(
-          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          curve: Interval(0.0, 0.5, curve: Curves.easeInOutQuint),
           parent: _animationController.view));
 
       _contentPositionY = Tween(begin: 0.0, end: posY).animate(CurvedAnimation(
-          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          curve: Interval(0.0, 0.5, curve: Curves.easeInOutQuint),
           parent: _animationController.view));
 
       _contentScale = Tween(begin: 1.0, end: 0.8).animate(CurvedAnimation(
-          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+          curve: Interval(0.0, 0.5, curve: Curves.easeOut),
           parent: _animationController.view));
 
       _borderRadius = BorderRadiusTween(
@@ -60,9 +60,9 @@ class HomeProvider with ChangeNotifier {
       ).animate(CurvedAnimation(
         parent: _animationController.view,
         curve: Interval(
-          0.700,
+          0.0,
           0.800,
-          curve: Curves.easeInOut,
+          curve: Curves.easeOut,
         ),
       ));
     }
@@ -115,4 +115,5 @@ class HomeProvider with ChangeNotifier {
   Stream<QuerySnapshot> fetchPets(){
     return Firestore.instance.collection('pets').snapshots();
   }
+  
 }

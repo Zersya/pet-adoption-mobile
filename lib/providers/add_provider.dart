@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,11 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum StateSubmit {
-  notSubmited,
-  isLoading,
-  Submited
-}
+enum StateSubmit { notSubmited, isLoading, Submited }
 
 class AddProvider with ChangeNotifier {
   List<File> _image = List(3);
@@ -43,40 +40,70 @@ class AddProvider with ChangeNotifier {
   List<String> _address = [null, null, null, null];
   List<String> get address => _address;
 
+  String _genderPet;
+  String get genderPet => _genderPet;
+
+  DateTime _dateofBirth;
+  DateTime get dateofBirth => _dateofBirth;
+
   Map<String, int> _generalPetValue;
   Map<String, int> get generalPetValue => _generalPetValue;
 
-  Map<String, int> _selectedColor;
-  Map<String, int> get selectedColor => _selectedColor;
+  Map<String, DocumentReference> _selectedColor;
+  Map<String, DocumentReference> get selectedColor => _selectedColor;
 
   StateSubmit _stateAddPet = StateSubmit.notSubmited;
   StateSubmit get stateAddPet => _stateAddPet;
 
-  Future submitPet() async{
-    _stateAddPet = StateSubmit.isLoading;
-    notifyListeners();
-
+  Future submitPet(_callback) async {
     String _petName = _namePetController.text;
     String _aboutPet = _aboutPetController.text;
     String _typePet = _petType[_selectedType] as String;
     String _addressShelter = _address[1]; //Detail address
+
+    if (_petName == null ||
+        _aboutPet == null ||
+        _typePet == null ||
+        _genderPet == null ||
+        _addressShelter == null ||
+        _address[0] == null ||
+        _address[1] == null ||
+        _address[2] == null ||
+        _address[3] == null ||
+        _dateofBirth == null ||
+        _image[0] == null) {
+      _callback();
+      return;
+    }
     GeoPoint _geoShelter =
         GeoPoint(double.parse(_address[2]), double.parse(_address[3]));
     List<String> _urls = List();
+    
+    _stateAddPet = StateSubmit.isLoading;
+    notifyListeners();
+    
 
     for (int i = 0; i < _image.length; i++) {
       String url = await _uploadImage(_image[i], _petName, i);
       if (url != null) _urls.add(url);
     }
 
+    FirebaseUser _firebaseUser = await FirebaseAuth.instance.currentUser();
+
     await Firestore.instance.collection("pets").document().setData({
       'petName': _petName,
       'aboutPet': _aboutPet,
       'typePet': _typePet,
       'addressShelter': _addressShelter,
+      'genderPet': _genderPet,
+      'dateofbirth': _dateofBirth.toLocal().millisecondsSinceEpoch,
+      'isAdopted': false,
       'geoShelter': _geoShelter,
       'generalPetValues': _generalPetValue,
-      'imageUrls': _urls
+      'imageUrls': _urls,
+      'email': _firebaseUser.email,
+      'displayName': _firebaseUser.displayName,
+      'phoneNumber': _firebaseUser.phoneNumber
     });
     _stateAddPet = StateSubmit.Submited;
     notifyListeners();
@@ -86,8 +113,7 @@ class AddProvider with ChangeNotifier {
     if (image == null) {
       return null;
     }
-    final String filename =
-        petName + index.toString() + extension(image.path);
+    final String filename = petName + index.toString() + extension(image.path);
     final StorageReference storageRef =
         FirebaseStorage.instance.ref().child(filename);
     final StorageUploadTask uploadTask = storageRef.putFile(image);
@@ -99,9 +125,10 @@ class AddProvider with ChangeNotifier {
 
   void initGeneralPetValue(data) {
     if (_generalPetValue == null) {
-      _generalPetValue = Map.fromIterable(data, key: (v) => v, value: (v) => 0);
+      _generalPetValue =
+          Map.fromIterable(data, key: (v) => v['name'], value: (v) => 0);
       _selectedColor = Map.fromIterable(data,
-          key: (v) => v, value: (v) => Random().nextInt(3));
+          key: (v) => v['name'], value: (v) => v['color']);
     }
   }
 
@@ -146,7 +173,21 @@ class AddProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setGender(String val) {
+    _genderPet = val;
+    notifyListeners();
+  }
+
+  void setDateofBirth(DateTime _dateTime) {
+    _dateofBirth = _dateTime;
+    notifyListeners();
+  }
+
   Stream<QuerySnapshot> fetchCategories() {
     return Firestore.instance.collection("categories").snapshots();
+  }
+
+  Stream<QuerySnapshot> fetchGeneralPet() {
+    return Firestore.instance.collection("generals").snapshots();
   }
 }

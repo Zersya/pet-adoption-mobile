@@ -37,7 +37,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   Icons.pets,
                   color: CustomColor.primaryColor,
                 ),
-              title: Text("Add Pet", style:TextStyle(fontWeight: FontWeight.w500),),
+              title: Text("Giving somone pet", style:TextStyle(fontWeight: FontWeight.w500),),
             ),
           ],
         ),

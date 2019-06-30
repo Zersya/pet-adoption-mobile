@@ -1,28 +1,62 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pet_adoption/providers/add_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
+import 'package:pet_adoption/shared/models/generalPet.dart';
 import 'package:provider/provider.dart';
 
 class AddPetTwoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AddProvider _addProvider = Provider.of<AddProvider>(context);
+    QuerySnapshot _snapshot = Provider.of<QuerySnapshot>(context);
+    if (_snapshot == null)
+      return SpinKitRotatingCircle(
+        color: CustomColor.accentColor,
+        size: 50.0,
+      );
+    _addProvider.initGeneralPetValue(_snapshot.documents);
 
     return SingleChildScrollView(
       child: Column(children: [
         ..._addProvider.generalPetValue.keys.map((val) {
-          return CircularSlider(
-            title: val,
-            backgroundColor: CustomColor
-                .selectedColor[_addProvider.selectedColor[val]].backgroundColor,
-            baseColor: CustomColor
-                .selectedColor[_addProvider.selectedColor[val]].middleColor,
-            selectionColor: CustomColor
-                .selectedColor[_addProvider.selectedColor[val]].foregroundColor,
-          );
+          return StreamProvider.value(
+              value: _addProvider.selectedColor[val].snapshots(),
+              child: Consumer<DocumentSnapshot>(
+                builder: (context, document, child) {
+                  if (document == null || document.data == null)
+                    return SpinKitRotatingCircle(
+                      color: CustomColor.accentColor,
+                      size: 50.0,
+                    );
+
+                  CustomDataColor _background =
+                      CustomDataColor.fromMap(document.data['background']);
+                  CustomDataColor _midground =
+                      CustomDataColor.fromMap(document.data['midground']);
+                  CustomDataColor _foreground =
+                      CustomDataColor.fromMap(document.data['foreground']);
+
+                  return CircularSlider(
+                      title: val,
+                      backgroundColor: Color.fromRGBO(
+                          _background.red,
+                          _background.green,
+                          _background.blue,
+                          _background.alpha),
+                      baseColor: Color.fromRGBO(_midground.red,
+                          _midground.green, _midground.blue, _midground.alpha),
+                      selectionColor: Color.fromRGBO(
+                          _foreground.red,
+                          _foreground.green,
+                          _foreground.blue,
+                          _foreground.alpha));
+                },
+              ));
         }).toList(),
         Container(
           width: MediaQuery.of(context).size.width,
@@ -31,7 +65,9 @@ class AddPetTwoScreen extends StatelessWidget {
             textColor: Colors.white,
             child: Text("Submit Pet"),
             onPressed: () {
-              _addProvider.submitPet();
+              _addProvider.submitPet((){
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Harap lengkapi data peliharaan"),));
+              });
             },
           ),
         )

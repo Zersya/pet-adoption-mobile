@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,7 +7,7 @@ import 'package:pet_adoption/providers/add_provider.dart';
 import 'package:pet_adoption/screens/addPetOne_screen.dart';
 import 'package:pet_adoption/screens/addPetTwo_screen.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
-import 'package:pet_adoption/shared/widgets/imageSelect_container.dart';
+import 'package:pet_adoption/shared/widgets/custom_dialog.dart';
 import 'package:provider/provider.dart';
 
 class AddPage extends StatefulWidget {
@@ -25,8 +26,6 @@ class _AddPageState extends State<AddPage> {
             builder: (_) => AddProvider(),
             child: Consumer<AddProvider>(
               builder: (context, value, child) {
-                List _general = ['Kindness', 'Healthy', 'Activity'];
-                value.initGeneralPetValue(_general);
 
                 return Stack(
                   children: <Widget>[
@@ -36,7 +35,11 @@ class _AddPageState extends State<AddPage> {
                       pageSnapping: true,
                       children: <Widget>[
                         AddPetOneScreen(),
-                        AddPetTwoScreen(),
+                        MultiProvider(
+                          providers: [
+                            StreamProvider.value(value: value.fetchGeneralPet(),)
+                          ],
+                          child: AddPetTwoScreen()),
                       ],
                     ),
                     if (value.stateAddPet == StateSubmit.isLoading)
@@ -73,35 +76,5 @@ class _AddPageState extends State<AddPage> {
                 );
               },
             )));
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  final child, onTap;
-  const CustomDialog({
-    Key key,
-    this.child,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black54,
-      child: Align(
-        alignment: Alignment.center,
-        child: GestureDetector(
-          onTap: this.onTap,
-          child: Container(
-              decoration: BoxDecoration(
-                color: CustomColor.primaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              width: MediaQuery.of(context).size.width / 1.5,
-              height: MediaQuery.of(context).size.height / 2,
-              child: this.child),
-        ),
-      ),
-    );
   }
 }

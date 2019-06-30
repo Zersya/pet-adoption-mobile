@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
@@ -87,8 +88,14 @@ class BodyWidget extends StatelessWidget {
 
   BodyWidget(this.snapshot);
 
+  
+
   @override
   Widget build(BuildContext context) {
+    int _daysPet = DateTime.fromMillisecondsSinceEpoch(
+                                  this.snapshot.data['dateofbirth'])
+                              .difference(DateTime.now())
+                              .inDays.abs();
     return Card(
         clipBehavior: Clip.antiAlias,
         shape:
@@ -120,6 +127,21 @@ class BodyWidget extends StatelessWidget {
                     Text(
                       this.snapshot.data['typePet'],
                       style: TextStyle(color: Colors.white),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          this.snapshot.data['genderPet'],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          _daysPet > 60 ?(_daysPet/360).toStringAsFixed(2)
+                               + " yo":_daysPet.toString() + " days",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Icon(MdiIcons.heartCircleOutline, color: Colors.red,)
+                      ],
                     ),
                   ],
                 ),
