@@ -89,8 +89,9 @@ class AddProvider with ChangeNotifier {
     }
 
     FirebaseUser _firebaseUser = await FirebaseAuth.instance.currentUser();
-
-    await Firestore.instance.collection("pets").document().setData({
+    String _docId = Firestore.instance.collection("pets").document().documentID;
+    await Firestore.instance.collection("pets").document(_docId).setData({
+      'docId': _docId,
       'petName': _petName,
       'aboutPet': _aboutPet,
       'typePet': _typePet,

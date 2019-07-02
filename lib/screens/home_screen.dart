@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
+import 'package:pet_adoption/shared/models/pet.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:pet_adoption/shared/widgets/choicechip_type.dart';
 import 'package:pet_adoption/shared/widgets/circle_photo.dart';
@@ -88,67 +89,81 @@ class BodyWidget extends StatelessWidget {
 
   BodyWidget(this.snapshot);
 
-  
-
   @override
   Widget build(BuildContext context) {
-    int _daysPet = DateTime.fromMillisecondsSinceEpoch(
-                                  this.snapshot.data['dateofbirth'])
-                              .difference(DateTime.now())
-                              .inDays.abs();
-    return Card(
-        clipBehavior: Clip.antiAlias,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        child: Stack(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                child: CachedNetworkImage(
-                  imageUrl: this.snapshot.data['imageUrls'][0],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                )),
-            Container(
-              color: Colors.black12,
-              padding: EdgeInsets.all(20.0),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      this.snapshot.data['petName'],
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+    int _daysPet =
+        DateTime.fromMillisecondsSinceEpoch(this.snapshot.data['dateofbirth'])
+            .difference(DateTime.now())
+            .inDays
+            .abs();
+
+    Pet _pet = Pet.fromMap(this.snapshot.data);
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(Router.detailPage, arguments: _pet);
+      },
+      child: Card(
+          clipBehavior: Clip.antiAlias,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.center,
+                  child: Hero(
+                    tag: _pet.docId,
+                    child: CachedNetworkImage(
+                      imageUrl: _pet.imageUrls[0],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
-                    Text(
-                      this.snapshot.data['typePet'],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          this.snapshot.data['genderPet'],
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          _daysPet > 60 ?(_daysPet/360).toStringAsFixed(2)
-                               + " yo":_daysPet.toString() + " days",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Icon(MdiIcons.heartCircleOutline, color: Colors.red,)
-                      ],
-                    ),
-                  ],
+                  )),
+              Container(
+                color: Colors.black12,
+                padding: EdgeInsets.all(20.0),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        _pet.petName,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        _pet.typePet,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            _pet.genderPet,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            _daysPet > 60
+                                ? (_daysPet / 360).toStringAsFixed(2) + " yo"
+                                : _daysPet.toString() + " days",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(
+                            MdiIcons.heartCircleOutline,
+                            color: Colors.red,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 }
 

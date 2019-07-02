@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pet_adoption/providers/add_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/models/generalPet.dart';
+import 'package:pet_adoption/shared/widgets/general_shimmer.dart';
 import 'package:provider/provider.dart';
 
 class AddPetTwoScreen extends StatelessWidget {
@@ -29,10 +30,7 @@ class AddPetTwoScreen extends StatelessWidget {
               child: Consumer<DocumentSnapshot>(
                 builder: (context, document, child) {
                   if (document == null || document.data == null)
-                    return SpinKitRotatingCircle(
-                      color: CustomColor.accentColor,
-                      size: 50.0,
-                    );
+                    return GeneralShimmer();
 
                   CustomDataColor _background =
                       CustomDataColor.fromMap(document.data['background']);
@@ -65,8 +63,10 @@ class AddPetTwoScreen extends StatelessWidget {
             textColor: Colors.white,
             child: Text("Submit Pet"),
             onPressed: () {
-              _addProvider.submitPet((){
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Harap lengkapi data peliharaan"),));
+              _addProvider.submitPet(() {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Harap lengkapi data peliharaan"),
+                ));
               });
             },
           ),
