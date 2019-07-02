@@ -141,11 +141,15 @@ class _DetailPageState extends State<DetailPage> {
                             color: Colors.black54,
                             fontSize: 18,
                             fontWeight: FontWeight.bold)),
-                    Text(_pet.aboutPet,
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(_pet.aboutPet,
+                      textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                          )),
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: FlatButton(

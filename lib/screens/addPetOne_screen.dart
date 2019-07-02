@@ -56,7 +56,7 @@ class AddPetOneScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 TextFormField(
                   controller: _addProvider.aboutPetController,
-                  maxLength: 620,
+                  maxLength: 320,
                   minLines: 3,
                   maxLines: 5,
                   validator: (val){

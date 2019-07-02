@@ -15,6 +15,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
+    HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
 
     return Scaffold(
       body: Container(
@@ -25,19 +26,31 @@ class _MenuDrawerState extends State<MenuDrawer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
-              leading: CirclePhoto(),
-              title: Text(_authProvider.user.displayName, style:TextStyle(fontWeight: FontWeight.w700),),
+              leading: Hero(
+                  tag: "profilePict",
+                  child: CirclePhoto()),
+              title: Text(
+                _authProvider.user.displayName,
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              onTap: () {
+                Provider.of<HomeProvider>(context).openDrawer();
+                Navigator.of(context).pushNamed(Router.profilePage);
+              },
             ),
             ListTile(
               onTap: () {
                 Provider.of<HomeProvider>(context).openDrawer();
                 Navigator.of(context).pushNamed(Router.addPage);
               },
-              leading:  Icon(
-                  Icons.pets,
-                  color: CustomColor.primaryColor,
-                ),
-              title: Text("Giving somone pet", style:TextStyle(fontWeight: FontWeight.w500),),
+              leading: Icon(
+                Icons.pets,
+                color: CustomColor.primaryColor,
+              ),
+              title: Text(
+                "Giving somone pet",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
             ),
           ],
         ),

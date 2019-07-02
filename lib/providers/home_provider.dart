@@ -17,6 +17,9 @@ class HomeProvider with ChangeNotifier {
   List<String> get address => _address;
 
   bool isInit = true;
+  
+  var _pageKey;
+  get pageKey => _pageKey;
 
 //=================ANIMATION==============================
   StatusDrawer _statusDrawer = StatusDrawer.closed;

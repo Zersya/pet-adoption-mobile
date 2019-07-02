@@ -37,8 +37,11 @@ class HomeScreen extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: Container(
-                    color: CustomColor.primaryColor,
                     height: MediaQuery.of(context).size.height / 1.5,
+                    decoration: BoxDecoration(
+                        color: CustomColor.primaryColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50.0))),
                   ),
                 ),
                 Flexible(flex: 1, child: Container())
@@ -187,7 +190,11 @@ class HeaderHome extends StatelessWidget {
                 width: 40.0,
               ),
             ),
-            new CirclePhoto()
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Router.profilePage);
+                },
+                child: new CirclePhoto())
           ],
         ),
         SizedBox(height: 40),
@@ -217,7 +224,12 @@ class HeaderHome extends StatelessWidget {
           child: Consumer<QuerySnapshot>(
             builder: (context, QuerySnapshot value, child) {
               if (value == null) {
-                return CircularProgressIndicator();
+                return Center(
+                  child: SpinKitThreeBounce(
+                    color: CustomColor.accentColor,
+                    size: 40.0,
+                  ),
+                );
               }
 
               List<DocumentSnapshot> data = value.documents;

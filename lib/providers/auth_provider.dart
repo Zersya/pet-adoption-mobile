@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthProvider with ChangeNotifier{
+class AuthProvider with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookLogin _facebookLogin = FacebookLogin();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,7 +18,8 @@ class AuthProvider with ChangeNotifier{
 
   Future handleSignInGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -39,14 +40,14 @@ class AuthProvider with ChangeNotifier{
   }
 
   void handleSignOut() async {
-    if(_googleSignIn.currentUser != null) {
+    if (_googleSignIn.currentUser != null) {
       await _googleSignIn.disconnect();
       await _googleSignIn.signOut();
     }
-    if(await _facebookLogin.isLoggedIn != null)
-      await _facebookLogin.logOut();
+    if (await _facebookLogin.isLoggedIn != null) await _facebookLogin.logOut();
 
     await _auth.signOut();
+
     _user = null;
     notifyListeners();
   }
