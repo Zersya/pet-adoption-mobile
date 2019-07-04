@@ -6,13 +6,16 @@ import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:provider/provider.dart';
 
 class CirclePhoto extends StatelessWidget {
+  final diameter;
+
+  const CirclePhoto({Key key, this.diameter = 40.0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
 
     return Container(
-      width: 40.0,
-      height: 40.0,
+      width: this.diameter,
+      height: this.diameter,
       decoration: BoxDecoration(
           color: CustomColor.accentColor,
           shape: BoxShape.circle,
