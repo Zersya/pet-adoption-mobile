@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pet_adoption/providers/typeSelect_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:pet_adoption/shared/widgets/imageSelect_container.dart';
@@ -13,6 +14,8 @@ class AddPetOneScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AddProvider _addProvider = Provider.of<AddProvider>(context);
+    TypeSelectProvider _typeSelectProvider =
+        Provider.of<TypeSelectProvider>(context);
 
     String _datePicked;
     if (_addProvider.dateofBirth != null)
@@ -21,7 +24,7 @@ class AddPetOneScreen extends StatelessWidget {
           _addProvider.dateofBirth.toLocal().month.toString() +
           "/" +
           _addProvider.dateofBirth.toLocal().year.toString();
-      
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -38,15 +41,15 @@ class AddPetOneScreen extends StatelessWidget {
                 LimitedBox(
                   maxHeight: 80,
                   child: StreamProvider<QuerySnapshot>.value(
-                      value: _addProvider.fetchCategories(),
+                      value: _typeSelectProvider.fetchCategories(),
                       child: TypeSelection()),
                 ),
                 Divider(height: 25.0, color: Colors.black87),
                 TextFormField(
                   controller: _addProvider.namePetController,
                   maxLength: 20,
-                  validator: (val){
-                    if(val.isEmpty) return "Please Fill this field.";
+                  validator: (val) {
+                    if (val.isEmpty) return "Please Fill this field.";
                   },
                   decoration: InputDecoration(
                       hintText: "Pet Name",
@@ -59,8 +62,8 @@ class AddPetOneScreen extends StatelessWidget {
                   maxLength: 320,
                   minLines: 3,
                   maxLines: 5,
-                  validator: (val){
-                    if(val.isEmpty) return "Please Fill this field.";
+                  validator: (val) {
+                    if (val.isEmpty) return "Please Fill this field.";
                   },
                   decoration: InputDecoration(
                       hintText: "About",
@@ -113,9 +116,7 @@ class AddPetOneScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          _datePicked != null
-                              ? _datePicked
-                              : "Select date",
+                          _datePicked != null ? _datePicked : "Select date",
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 18),
                         ),

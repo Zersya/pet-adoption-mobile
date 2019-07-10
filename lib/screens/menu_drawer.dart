@@ -26,9 +26,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
-              leading: Hero(
-                  tag: "profilePict",
-                  child: CirclePhoto()),
+              leading: Hero(tag: "profilePict", child: CirclePhoto()),
               title: Text(
                 _authProvider.user.displayName,
                 style: TextStyle(fontWeight: FontWeight.w700),
@@ -49,6 +47,33 @@ class _MenuDrawerState extends State<MenuDrawer> {
               ),
               title: Text(
                 "Giving somone pet",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed(Router.givinPetPage);
+              },
+              leading: Icon(
+                Icons.pets,
+                color: CustomColor.primaryColor,
+              ),
+              title: Text(
+                "Givin Pet",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Provider.of<HomeProvider>(context).openDrawer();
+                Navigator.of(context).pushNamed(Router.addPage);
+              },
+              leading: Icon(
+                Icons.pets,
+                color: CustomColor.primaryColor,
+              ),
+              title: Text(
+                "Loved Pet",
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
             ),

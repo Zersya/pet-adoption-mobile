@@ -27,15 +27,8 @@ class AddProvider with ChangeNotifier {
   PageController _pageController = PageController();
   PageController get pageController => _pageController;
 
-  //Scaling selected Pet and not selected.
-  List<double> _scaleType = List();
-  List<double> get scaleType => _scaleType;
-
   List _petType = List();
   List get petType => _petType;
-
-  int _selectedType = 0;
-  int get selectedType => _selectedType;
 
   List<String> _address = [null, null, null, null];
   List<String> get address => _address;
@@ -55,10 +48,10 @@ class AddProvider with ChangeNotifier {
   StateSubmit _stateAddPet = StateSubmit.notSubmited;
   StateSubmit get stateAddPet => _stateAddPet;
 
-  Future submitPet(_callback) async {
+  Future submitPet(petCategory, _callback) async {
     String _petName = _namePetController.text;
     String _aboutPet = _aboutPetController.text;
-    String _typePet = _petType[_selectedType] as String;
+    String _typePet = petCategory as String;
     String _addressShelter = _address[1]; //Detail address
 
     if (_petName == null ||
@@ -148,23 +141,6 @@ class AddProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void init(List<DocumentSnapshot> categories) {
-    if (_scaleType.length == 0) {
-      for (var i = 0; i < categories.length; i++) _scaleType.add(20.0);
-      _scaleType[0] = 45.0;
-      _petType = categories.map((v) => v.data['name']).toList();
-    }
-  }
-
-  void onPageTypeChange(index) {
-    _selectedType = index;
-    _scaleType[index] = 45.0;
-    if (index > 0) _scaleType[index - 1] = 20.0;
-    if (index < _scaleType.length - 1) _scaleType[index + 1] = 20.0;
-
-    notifyListeners();
-  }
-
   void setAddress(List<String> address) {
     if (address != null) {
       _address = address;
@@ -184,9 +160,6 @@ class AddProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Stream<QuerySnapshot> fetchCategories() {
-    return Firestore.instance.collection("categories").snapshots();
-  }
 
   Stream<QuerySnapshot> fetchGeneralPet() {
     return Firestore.instance.collection("generals").snapshots();

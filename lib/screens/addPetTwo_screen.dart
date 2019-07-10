@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pet_adoption/providers/add_provider.dart';
+import 'package:pet_adoption/providers/typeSelect_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/models/generalPet.dart';
 import 'package:pet_adoption/shared/widgets/general_shimmer.dart';
@@ -14,6 +15,8 @@ class AddPetTwoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AddProvider _addProvider = Provider.of<AddProvider>(context);
+    TypeSelectProvider _typeSelectProvider =
+        Provider.of<TypeSelectProvider>(context);
     QuerySnapshot _snapshot = Provider.of<QuerySnapshot>(context);
     if (_snapshot == null)
       return SpinKitRotatingCircle(
@@ -63,7 +66,7 @@ class AddPetTwoScreen extends StatelessWidget {
             textColor: Colors.white,
             child: Text("Submit Pet"),
             onPressed: () {
-              _addProvider.submitPet(() {
+              _addProvider.submitPet(_typeSelectProvider.petType, () {
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("Harap lengkapi data peliharaan"),
                 ));

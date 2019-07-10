@@ -6,8 +6,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
-import 'package:pet_adoption/shared/models/pet.dart';
+import 'package:pet_adoption/shared/enum.dart';
 import 'package:pet_adoption/shared/router.dart';
+import 'package:pet_adoption/shared/widgets/card_pet.dart';
 import 'package:pet_adoption/shared/widgets/choicechip_type.dart';
 import 'package:pet_adoption/shared/widgets/circle_photo.dart';
 import 'package:pet_adoption/shared/widgets/location_pick.dart';
@@ -67,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                         delegate: SliverChildListDelegate(
                           [
                             if (value.documents.length > 0)
-                              ...value.documents.map((val) => BodyWidget(val))
+                              ...value.documents.map((val) => BodyWidget(val, PetNavigator.detailpet))
                             else
                               Center(
                                 child: Text("No data found!"),
@@ -87,88 +88,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class BodyWidget extends StatelessWidget {
-  final DocumentSnapshot snapshot;
-
-  BodyWidget(this.snapshot);
-
-  @override
-  Widget build(BuildContext context) {
-    int _daysPet =
-        DateTime.fromMillisecondsSinceEpoch(this.snapshot.data['dateofbirth'])
-            .difference(DateTime.now())
-            .inDays
-            .abs();
-
-    Pet _pet = Pet.fromMap(this.snapshot.data);
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(Router.detailPage, arguments: _pet);
-      },
-      child: Card(
-          clipBehavior: Clip.antiAlias,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.center,
-                  child: Hero(
-                    tag: _pet.docId,
-                    child: CachedNetworkImage(
-                      imageUrl: _pet.imageUrls[0],
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                  )),
-              Container(
-                color: Colors.black12,
-                padding: EdgeInsets.all(20.0),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        _pet.petName,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        _pet.typePet,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            _pet.genderPet,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            _daysPet > 60
-                                ? (_daysPet / 360).toStringAsFixed(2) + " yo"
-                                : _daysPet.toString() + " days",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            MdiIcons.heartCircleOutline,
-                            color: Colors.red,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          )),
-    );
-  }
-}
 
 class HeaderHome extends StatelessWidget {
   @override
