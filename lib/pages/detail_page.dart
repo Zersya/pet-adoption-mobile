@@ -28,7 +28,7 @@ class _DetailPageState extends State<DetailPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => DetailProvider(),
+          create: (_) => DetailProvider(),
         ),
       ],
       child: Consumer<DetailProvider>(builder: (context, value, child) {

@@ -14,10 +14,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => AuthProvider(),
+          create: (_) => AuthProvider(),
         ),
         ChangeNotifierProvider(
-          builder: (_) => HomeProvider(),
+          create: (_) => HomeProvider(),
         ),
       ],
       child: Consumer<AuthProvider>(

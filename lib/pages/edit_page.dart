@@ -24,10 +24,10 @@ class _EditPageState extends State<EditPage> {
         body: MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => GivinPetProvider(),
+          create: (_) => GivinPetProvider(),
         ),
         ChangeNotifierProvider(
-          builder: (_) => DetailProvider(),
+          create: (_) => DetailProvider(),
         )
       ],
       child: SingleChildScrollView(

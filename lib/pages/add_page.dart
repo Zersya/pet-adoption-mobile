@@ -25,10 +25,10 @@ class _AddPageState extends State<AddPage> {
         body: MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              builder: (_) => AddProvider(),
+              create: (_) => AddProvider(),
             ),
             ChangeNotifierProvider(
-              builder: (_) => TypeSelectProvider(),
+              create: (_) => TypeSelectProvider(),
             )
           ],
           child: Consumer<AddProvider>(

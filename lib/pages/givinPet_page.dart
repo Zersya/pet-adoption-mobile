@@ -25,7 +25,7 @@ class _GivinPetPageState extends State<GivinPetPage> {
           title: Text("Givin Pet"),
         ),
         body: ChangeNotifierProvider(
-            builder: (_) => GivinPetProvider(),
+            create: (_) => GivinPetProvider(),
             child: Consumer<GivinPetProvider>(
               builder: (context, value, child) {
                 return Padding(

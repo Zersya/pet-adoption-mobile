@@ -50,7 +50,7 @@ class DetailPetScreen extends StatelessWidget {
                       height: 2.5,
                     ),
                     ChangeNotifierProvider(
-                      builder: (_) => TypeSelectProvider(),
+                      create: (_) => TypeSelectProvider(),
                       child: PetTypeWidget(),
                     )
                   ],

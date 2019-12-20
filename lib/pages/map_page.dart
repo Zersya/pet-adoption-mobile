@@ -13,12 +13,12 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   TextEditingController _searchAddress = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ChangeNotifierProvider(
-      builder: (_) => MapProvider(),
+      create: (_) => MapProvider(),
       child: Consumer<MapProvider>(builder: (context, value, child) {
         if (value.address.isNotEmpty) _searchAddress.text = value.address[0];
 
@@ -34,9 +34,7 @@ class _MapPageState extends State<MapPage> {
                     controller: _searchAddress,
                     textInputAction: TextInputAction.search,
                     onSubmitted: (val) {
-                      value.addressToLatLong(
-                          address: val,
-                          context: context);
+                      value.addressToLatLong(address: val, context: context);
                       value.goToMyPos();
                     },
                     decoration: InputDecoration(
@@ -75,8 +73,7 @@ class _MapPageState extends State<MapPage> {
             icon: Icon(Icons.search),
             onPressed: () {
               value.addressToLatLong(_searchAddress.value.text, context);
-              value.addMarker(
-                  context: context);
+              value.addMarker(context: context);
               value.goToMyPos();
             },
           )
