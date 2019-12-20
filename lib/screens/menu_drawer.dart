@@ -15,7 +15,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
+    // HomeProvider _homeProvider = Provider.of<HomeProvider>(context);
 
     return Scaffold(
       body: Container(

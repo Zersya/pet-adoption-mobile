@@ -1,17 +1,9 @@
-import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/detail_provider.dart';
-import 'package:pet_adoption/providers/typeSelect_provider.dart';
 import 'package:pet_adoption/screens/detail_screen.dart';
-import 'package:pet_adoption/shared/custom_color.dart';
-import 'package:pet_adoption/shared/models/generalPet.dart';
 import 'package:pet_adoption/shared/models/pet.dart';
-import 'package:pet_adoption/shared/widgets/general_shimmer.dart';
-import 'package:pet_adoption/shared/widgets/radial_progress.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {

@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
-import 'package:pet_adoption/shared/router.dart';
 import 'package:pet_adoption/shared/widgets/circle_photo.dart';
 import 'package:provider/provider.dart';
 
@@ -157,7 +155,6 @@ class ProfilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return true;
   }
 }

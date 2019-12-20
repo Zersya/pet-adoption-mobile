@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pet_adoption/providers/typeSelect_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
@@ -50,6 +49,7 @@ class AddPetOneScreen extends StatelessWidget {
                   maxLength: 20,
                   validator: (val) {
                     if (val.isEmpty) return "Please Fill this field.";
+                    return null;
                   },
                   decoration: InputDecoration(
                       hintText: "Pet Name",
@@ -64,6 +64,7 @@ class AddPetOneScreen extends StatelessWidget {
                   maxLines: 5,
                   validator: (val) {
                     if (val.isEmpty) return "Please Fill this field.";
+                    return null;
                   },
                   decoration: InputDecoration(
                       hintText: "About",

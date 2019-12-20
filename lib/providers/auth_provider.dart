@@ -22,6 +22,7 @@ class AuthProvider with ChangeNotifier {
         await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
+      idToken: googleAuth.idToken,
       accessToken: googleAuth.accessToken,
     );
 

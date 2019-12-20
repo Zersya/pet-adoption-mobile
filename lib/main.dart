@@ -3,7 +3,6 @@ import 'package:pet_adoption/pages/auth_page.dart';
 import 'package:pet_adoption/pages/home_page.dart';
 import 'package:pet_adoption/providers/auth_provider.dart';
 import 'package:pet_adoption/providers/home_provider.dart';
-import 'package:pet_adoption/shared/custom_color.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:provider/provider.dart';
 

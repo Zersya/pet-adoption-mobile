@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/providers/detail_provider.dart';
-import 'package:pet_adoption/shared/models/pet.dart';
 import 'package:provider/provider.dart';
 
 class PetNameWidget extends StatelessWidget {
@@ -29,6 +28,7 @@ class PetNameWidget extends StatelessWidget {
         maxLength: 20,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
         },
         decoration: InputDecoration(
             hintText: "Pet Name", filled: true, fillColor: Colors.black12),

@@ -50,10 +50,14 @@ class Router {
             settings: RouteSettings(name: givinPetPage),
             builder: (_) => GivinPetPage());
       case editPage:
-      var data = routeSettings.arguments;
+        var data = routeSettings.arguments;
         return MaterialPageRoute(
             settings: RouteSettings(name: editPage),
             builder: (_) => EditPage(pet: data));
+      default:
+        return MaterialPageRoute(
+            settings: RouteSettings(name: authPage),
+            builder: (_) => AuthPage());
     }
   }
 }

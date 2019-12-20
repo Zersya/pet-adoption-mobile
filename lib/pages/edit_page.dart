@@ -50,6 +50,7 @@ class NameWidget extends StatelessWidget {
         maxLength: 20,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
         },
         decoration: InputDecoration(
             hintText: "Pet Name", filled: true, fillColor: Colors.black12),
@@ -66,6 +67,8 @@ class NameWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             )),
       );
+
+      return Container();
   }
 }
 
@@ -80,6 +83,7 @@ class TypeWidget extends StatelessWidget {
         maxLength: 20,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
         },
         decoration: InputDecoration(
             hintText: "Pet Type", filled: true, fillColor: Colors.black12),
@@ -95,6 +99,8 @@ class TypeWidget extends StatelessWidget {
               fontSize: 18,
             )),
       );
+
+      return Container();
   }
 }
 
@@ -109,6 +115,8 @@ class GenderWidget extends StatelessWidget {
         maxLength: 20,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
+
         },
         decoration: InputDecoration(
             hintText: "Pet Name", filled: true, fillColor: Colors.black12),
@@ -125,6 +133,8 @@ class GenderWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             )),
       );
+      return Container();
+
   }
 }
 
@@ -139,6 +149,7 @@ class AddressWidget extends StatelessWidget {
         maxLength: 20,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
         },
         decoration: InputDecoration(
             hintText: "Address shelter",
@@ -158,6 +169,8 @@ class AddressWidget extends StatelessWidget {
           ],
         ),
       );
+      return Container();
+
   }
 }
 
@@ -174,6 +187,7 @@ class AboutWidget extends StatelessWidget {
         maxLines: 5,
         validator: (val) {
           if (val.isEmpty) return "Please Fill this field.";
+          return null;
         },
         decoration: InputDecoration(
             hintText: "About", filled: true, fillColor: Colors.black12),
@@ -202,5 +216,7 @@ class AboutWidget extends StatelessWidget {
               ),
             ],
           ));
+      return Container();
+
   }
 }

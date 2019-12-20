@@ -4,14 +4,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pet_adoption/providers/detail_provider.dart';
 import 'package:pet_adoption/providers/typeSelect_provider.dart';
 import 'package:pet_adoption/shared/custom_color.dart';
-import 'package:pet_adoption/shared/enum.dart';
 import 'package:pet_adoption/shared/models/generalPet.dart';
 import 'package:pet_adoption/shared/models/pet.dart';
 import 'package:pet_adoption/shared/router.dart';
 import 'package:pet_adoption/shared/widgets/general_shimmer.dart';
 import 'package:pet_adoption/shared/widgets/location_pick.dart';
 import 'package:pet_adoption/shared/widgets/radial_progress.dart';
-import 'package:pet_adoption/shared/widgets/type_selection.dart';
 import 'package:provider/provider.dart';
 
 import 'detail_screen/pet_name.dart';
@@ -136,8 +134,8 @@ class PetAddressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DetailProvider _detailProvider = Provider.of<DetailProvider>(context);
-    TextEditingController _controller =
-        TextEditingController(text: _detailProvider.pet.addressShelter);
+    // TextEditingController _controller =
+    //     TextEditingController(text: _detailProvider.pet.addressShelter);
 
     if (!_detailProvider.isWidgetEditable['detailAddress'])
       return GestureDetector(
